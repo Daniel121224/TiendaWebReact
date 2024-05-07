@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import APIInvoke from "../../utils/APIInvoke";
+import swal from 'sweetalert';
 
 const CrearCuenta = () => {
 
@@ -21,6 +23,30 @@ const CrearCuenta = () => {
         })
     }
 
+    useEffect(() => {
+        document.getElementById('nombre').focus();
+    }, []);
+
+    const crearCuenta = async () => {
+        const data = {
+            idTipoDocumento: usuario.idTipoDocumento,
+            numeroDocumento: usuario.numeroDocumento,
+            nombre: usuario.nombre,
+            nombreUsuario: usuario.nombreUsuario,
+            email: usuario.email,
+            password: usuario.password
+
+        }
+        const response =  await APIInvoke.invokePOST(`/api/usuarios`, data);
+        console.log(response);
+    }
+
+
+
+    const onSubmit = (e) => {
+        e.preventDefault();
+        crearCuenta();
+    }
 
     return (
         <div className="hold-transition login-page">
@@ -31,8 +57,8 @@ const CrearCuenta = () => {
                 <div className="card">
                     <div className="card-body login-card-body">
                         <p className="login-box-msg">Ingrese los datos del usuario.</p>
-                        <form action="../../index3.html" method="post">
-
+                        
+                        <form onSubmit={onSubmit}>
                             <div className="input-group mb-3">
                                 <input type="text"
                                     class="form-control"
