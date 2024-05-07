@@ -6,12 +6,12 @@ import swal from 'sweetalert';
 const CrearCuenta = () => {
 
     const [usuario, setUsuario] = useState({
-    nombre: '',
-    email: '',
-    password: '',
-    idTipoDocumento: '',
-    numeroDocumento: '',
-    nombreUsuario: ''
+        nombre: '',
+        email: '',
+        password: '',
+        idTipoDocumento: '',
+        numeroDocumento: '',
+        nombreUsuario: ''
     });
 
     const { nombre, email, password, idTipoDocumento, numeroDocumento, nombreUsuario } = usuario;
@@ -38,10 +38,70 @@ const CrearCuenta = () => {
 
         }
         const response =  await APIInvoke.invokePOST(`/api/usuarios`, data);
-        console.log(response);
+        const mensaje = response.msg;
+        console.log(mensaje);
+
+        if (mensaje === 'El usuario ya existe') {
+            const msg = 'El usuario ya existe';
+            swal({
+                title: "Error",
+                text: mensaje,
+                icon: "error",
+                buttons: {
+                    confirm: {
+                        text: "Ok",
+                        value: true,
+                        visible: true,
+                        className: "btn btn-danger",
+                        closeModal: true
+                    }
+                
+                }
+            });
+        } else if (password.length < 6) {
+            const msg = 'La contraseña debe ser de al menos 6 caracteres';
+            swal({
+                title: "Error",
+                text: mensaje,
+                icon: "error",
+                buttons: {
+                    confirm: {
+                        text: "Ok",
+                        value: true,
+                        visible: true,
+                        className: "btn btn-danger",
+                        closeModal: true
+                    }
+                
+                }
+            });
+        } else {
+            const msg = 'Usuario creado correctamente';
+            swal({
+                title: "Exito",
+                text: mensaje,
+                icon: "success",
+                buttons: {
+                    confirm: {
+                        text: "Ok",
+                        value: true,
+                        visible: true,
+                        className: "btn btn-primary",
+                        closeModal: true
+                    }
+                
+                }
+            });
+            setUsuario({
+                nombre: '',
+                email: '',
+                password: '',
+                idTipoDocumento: '',
+                numeroDocumento: '',
+                nombreUsuario: ''
+            });
+        }
     }
-
-
 
     const onSubmit = (e) => {
         e.preventDefault();
